@@ -40,8 +40,12 @@ class User(AbstractUser):
 class Payment(models.Model):
     payment_user = models.ForeignKey(User, on_delete=models.CASCADE)
     payment_date = models.DateField()
-    payment_course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
-    payment_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True)
+    payment_course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, null=True, blank=True
+    )
+    payment_lesson = models.ForeignKey(
+        Lesson, on_delete=models.CASCADE, null=True, blank=True
+    )
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(
         max_length=20, choices=[("cash", "Наличные"), ("transfer", "Перевод на счет")]
