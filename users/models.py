@@ -19,7 +19,11 @@ class User(AbstractUser):
         help_text="Укажите телефон",
     )
     city = models.CharField(
-        max_length=50, verbose_name="Страна", help_text="Укажите страну"
+        max_length=50,
+        blank=True,
+        null=True,
+        verbose_name="Страна",
+        help_text="Укажите страну",
     )
     avatar = models.ImageField(
         upload_to="users/avatars",
