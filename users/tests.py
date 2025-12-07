@@ -49,5 +49,5 @@ class SubscriptionTests(APITestCase):
 
         response = self.client.post(
             self.subscribe_url, {"course_id": 9999}
-        )  # Предположим, что курс с ID 9999 не существует
+        )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
