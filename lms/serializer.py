@@ -31,7 +31,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):  # Метод для проверки подписки
         user = self.context["request"].user
-        return Subscription.objects.filter(course=obj, user=user).exists()
+        return Subscription.objects.filter(subscription_course=obj, subscription_user=user).exists()
 
     class Meta:
         model = Course
