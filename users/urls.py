@@ -1,21 +1,16 @@
 from django.contrib.auth.decorators import permission_required
 from django.urls import path
 from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView)
 
 from users.apps import UsersConfig
-from users.views import (
-    PaymentCreateApiView,
-    PaymentDestroyApiView,
-    PaymentListApiView,
-    PaymentRetrieveApiView,
-    PaymentUpdateApiView,
-    UserCreateApiView,
-    UserDestroyApiView,
-    UserListApiView,
-    UserRetrieveApiView,
-    UserUpdateApiView,
-)
+from users.views import (PaymentCreateApiView, PaymentDestroyApiView,
+                         PaymentListApiView, PaymentRetrieveApiView,
+                         PaymentUpdateApiView, SubscriptionView,
+                         UserCreateApiView, UserDestroyApiView,
+                         UserListApiView, UserRetrieveApiView,
+                         UserUpdateApiView)
 
 app_name = UsersConfig.name
 
@@ -58,4 +53,5 @@ urlpatterns = [
         PaymentUpdateApiView.as_view(),
         name="payment_update",
     ),
+    path("subscribe/", SubscriptionView.as_view(), name="subscribe"),
 ]
