@@ -1,8 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, serializers
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework import filters
+from rest_framework.serializers import ModelSerializer
 
 from users.models import Payment, Subscription, User
+from users.services import process_payment
 
 
 class PaymentSerializer(ModelSerializer):
@@ -13,6 +14,10 @@ class PaymentSerializer(ModelSerializer):
     class Meta:
         model = Payment
         fields = "__all__"
+
+    def create(self, validated_data):
+        payment_response = process_payment(validated_data)
+        return payment_response
 
 
 class UserSerializer(ModelSerializer):

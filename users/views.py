@@ -5,7 +5,6 @@ from rest_framework.generics import (CreateAPIView, DestroyAPIView,
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
 
 from lms.models import Course
 from users.models import Payment, Subscription, User
@@ -15,6 +14,13 @@ from users.serializer import PaymentSerializer, UserSerializer
 class PaymentCreateApiView(CreateAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = PaymentSerializer(data=request.data)
+        if serializer.is_valid():
+            payment_response = serializer.save()
+            return Response(payment_response, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PaymentListApiView(ListAPIView):
