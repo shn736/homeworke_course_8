@@ -42,7 +42,14 @@ class User(AbstractUser):
 
 
 class Payment(models.Model):
-    payment_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Пользователь",
+        help_text="Укажите пользователя",
+    )
     payment_date = models.DateField()
     payment_course = models.ForeignKey(
         Course, on_delete=models.CASCADE, null=True, blank=True
@@ -50,9 +57,26 @@ class Payment(models.Model):
     payment_lesson = models.ForeignKey(
         Lesson, on_delete=models.CASCADE, null=True, blank=True
     )
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(
         max_length=20, choices=[("cash", "Наличные"), ("transfer", "Перевод на счет")]
+    )
+    amount = models.PositiveIntegerField(
+        verbose_name="Сумма платежа",
+        help_text="Укажите сумму платежа",
+    )
+    session_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="Id сессии",
+        help_text="Укажите Id сессии",
+    )
+    stripe_session_url = models.URLField(
+        max_length=500,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на оплату",
+        help_text="Укажите ссылку на оплату",
     )
 
     class Meta:
