@@ -1,3 +1,7 @@
+from datetime import timedelta
+
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
                                      UpdateAPIView)
@@ -9,6 +13,8 @@ from lms.paginations import CustomPagination
 from lms.serializer import (CourseDetailSerializer, CourseSerializer,
                             LessonSerializer)
 from users.permissions import IsModer, IsOwner
+
+from .tasks import send_course_update_email
 
 
 class CourseViewSet(ModelViewSet):
@@ -31,6 +37,12 @@ class CourseViewSet(ModelViewSet):
         elif self.action == "destroy":
             self.permission_classes = (~IsModer | IsOwner,)
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        course = serializer.save()
+
+        if course.updated_at < timezone.now() - timedelta(hours=4):
+            send_course_update_email.delay(course.id)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
