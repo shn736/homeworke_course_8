@@ -22,8 +22,35 @@ jobs:
       - name: Run flake8
         run: flake8 .
 
+  postgres-check:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          NAME: ${{ secrets.NAME }}
+          USER: ${{ secrets.USER }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        options: >-
+          --health-cmd "pg_isready -U user"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check PostgreSQL Status
+        run: |
+          if pg_isready -U user; then
+            echo "PostgreSQL is up and running"
+          else
+            echo "PostgreSQL is not running" && exit 1
+          fi
+
   test:
-    needs: lint
+    needs: lint, postgres-check
     runs-on: ubuntu-latest
 
     env:
