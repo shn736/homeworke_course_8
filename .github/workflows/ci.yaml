@@ -50,7 +50,7 @@ jobs:
           fi
 
   test:
-    needs: lint, postgres-check
+    needs: lint
     runs-on: ubuntu-latest
 
     env:
