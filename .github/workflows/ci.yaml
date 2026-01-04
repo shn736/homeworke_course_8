@@ -76,8 +76,10 @@ jobs:
             sleep 1
           done
 
-      - name: Run tests
-        run: python manage.py test
+      - name: Run migration and tests
+        run: |
+          python manage.py migrate
+          python manage.py test
 
 
   build:
