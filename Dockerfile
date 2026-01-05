@@ -28,11 +28,6 @@ ENV SECRET_KEY=$SECRET_KEY
 ENV CELERY_BROKER_URL=$CELERY_BROKER_URL
 ENV CELERY_BACKEND=$CELERY_BACKEND
 
-RUN    docker build -t my_app \
-          --build-arg SECRET_KEY=$(grep SECRET_KEY .env | cut -d '=' -f2) \
-          --build-arg CELERY_BROKER_URL=$(grep CELERY_BROKER_URL .env | cut -d '=' -f2) \
-          --build-arg CELERY_BACKEND=$(grep CELERY_BACKEND .env | cut -d '=' -f2) .
-
 # Создаем директорию для медиафайлов
 RUN mkdir -p /app/media
 
